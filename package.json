@@ -1,0 +1,19 @@
+{
+  "name": "apimocker",
+  "version": "0.0.1",
+  "description": "A simple webservice mocker to mock basic http calls",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mocker",
+    "apimocker"
+  ],
+  "dependencies": {
+    "express": "*",
+    "lodash": "^4.6.1"
+  },
+  "author": "cerlin@linkstreet.in",
+  "license": "MIT"
+}
