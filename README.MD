@@ -31,7 +31,7 @@ To run this mocker
     }
     ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: The system ignores the payload variable for GET http verb]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: Not all http verbs uses payload variable]
 
 2. Define your routes as per the structure given below. Routes are the files which connects the request and the config. 
 
