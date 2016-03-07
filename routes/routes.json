@@ -1,7 +1,7 @@
 {
     "GET:/api/v2/user" : {
         "rule" : "./io/get.json"
-    }
+    },
     "POST:/api/v2/user" : {
         "rule" : "./io/login.json"
     }
