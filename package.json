@@ -1,6 +1,6 @@
 {
   "name": "webservice-mocker",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "./index.js",
   "scripts": {
