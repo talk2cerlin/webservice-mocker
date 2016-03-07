@@ -1,6 +1,6 @@
 {
-  "name": "apimocker",
-  "version": "0.0.1",
+  "name": "webservice-mocker",
+  "version": "0.1.0",
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "index.js",
   "scripts": {
@@ -8,12 +8,13 @@
   },
   "keywords": [
     "mocker",
-    "apimocker"
+    "webservicemocker",
+    "webservice"
+    "apimocker",
   ],
   "dependencies": {
-    "express": "*",
     "lodash": "^4.6.1"
   },
-  "author": "cerlin@linkstreet.in",
+  "author": "cerlin.selvamony@gmail.com",
   "license": "MIT"
 }
