@@ -2,15 +2,15 @@
   "name": "webservice-mocker",
   "version": "0.1.0",
   "description": "A simple webservice mocker to mock basic http calls",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "mocker",
     "webservicemocker",
-    "webservice"
     "apimocker",
+    "webservice"
   ],
   "dependencies": {
     "lodash": "^4.6.1"

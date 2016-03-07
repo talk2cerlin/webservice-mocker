@@ -102,7 +102,16 @@ module.exports = function(){
     }
 
     var failureHandler = function(err){
-        console.log(err);
+        var error = {
+            "headers" : {
+                "content-type" : "application/json"
+            },
+            "statusCode" : 400,
+            "payload" : {
+                "message" : err
+            }
+        }
+        return responseDispatcher(error);
     }
 
     var app = {
