@@ -7,7 +7,6 @@ To run this mocker
 
 (1) Define your request and response as per the structure given below
 
-    ```json
     {
         "request" : {
             "headers" : {
@@ -29,13 +28,11 @@ To run this mocker
             }
         }
     }
-    ```
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: Not all http verbs uses payload variable]
 
 (2) Define your routes as per the structure given below. Routes are the files which connects the request and the config. 
 
-    ```json
     {
         "GET:/api/v2/user" : {
             "rule" : "./[path to file]/user.json"
@@ -44,13 +41,11 @@ To run this mocker
             "rule" : "./[path to file]/update.json"
         }
     }
-    ```
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: The path should be relative from your app's root directory]
 
 (3) Create a http server, require the mocker and call the handle method like,
 
-    ```javascript
     var http = require('http');
     var mocker = require('webservice-mocker');
 
@@ -62,7 +57,6 @@ To run this mocker
     });
 
     server.listen(8080);
-    ```
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: If there is any error in loading the routes or config file, the response payload will have the error message.]
 
