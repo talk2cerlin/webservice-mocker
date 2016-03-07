@@ -3,7 +3,7 @@ var url  = require('url');
 var isEqual = require('lodash/isEqual');
 
 var config = {
-    "routePath" : "./routes/"
+    "routeFile" : "./routes/routes.json"
 }
 
 var parseJson = function(json){
@@ -11,6 +11,18 @@ var parseJson = function(json){
         return JSON.parse(json);
     } catch(e) {
         return null;
+    }
+}
+
+var getError = function(message, statuscode){
+    return {
+        "headers" : {
+            "content-type" : "application/json"
+        },
+        "statusCode" : statuscode,
+        "payload" : {
+            "message" : message
+        }
     }
 }
 
@@ -41,6 +53,7 @@ module.exports = function(){
             }
         } else {
             // This will be unreachable code since data will always be set
+            response.setHeader('Content-Type', "application/json");
             response.statusCode = 404;
             return response.end(JSON.stringify({"error" : "Route not found"}));
         }
@@ -52,24 +65,24 @@ module.exports = function(){
         }
 
         if(config == null){
-            var error = {
-                "headers" : {
-                    "content-type" : "application/json"
-                },
-                "statusCode" : 400,
-                "payload" : {
-                    "message" : "Route found, but error loading in the corresponding config."
-                }
-            }
-            return responseDispatcher(error);
+            return responseDispatcher(getError("Route found, but error loading in the corresponding config.", 400));
         }
 
         var requestHeaders = request.headers;
 
-        if ( typeof config['headers'] == "object" ){
-            for(var header in config['headers']) {
-                if(typeof requestHeaders[header] == "undefined")
-                    return responseDispatcher(null);
+        if ( typeof config['request'] == "object" ){
+            if ( typeof config['request']['headers'] == "object" ){
+                for(var header in config['request']['headers']) {
+                    if(typeof requestHeaders[header] == "undefined"){
+
+                        return responseDispatcher(getError("One or more header(s) are missing", 400));
+
+                    } else if(requestHeaders[header].toLowerCase() != config['request']['headers'][header].toLowerCase()) {
+                        
+                        return responseDispatcher(getError("Header mismatch", 400));
+
+                    }
+                }
             }
         }
 
@@ -98,20 +111,10 @@ module.exports = function(){
                 return responseDispatcher(null);
             }
         }
-
     }
 
     var failureHandler = function(err){
-        var error = {
-            "headers" : {
-                "content-type" : "application/json"
-            },
-            "statusCode" : 400,
-            "payload" : {
-                "message" : err
-            }
-        }
-        return responseDispatcher(error);
+        return responseDispatcher(getError(err, 400));
     }
 
     var app = {
@@ -135,7 +138,7 @@ module.exports = function(){
             request.on('end', function () {
                 request.postdata = parseJson(body);
                 // Load the routes
-                loader.load(config.routePath + "routes.json", appHandler, failureHandler);
+                loader.load(config.routeFile, appHandler, failureHandler);
             });
 
 
@@ -145,29 +148,22 @@ module.exports = function(){
                 }
 
                 if(route == null){
-                    var error = {
-                        "headers" : {
-                            "content-type" : "application/json"
-                        },
-                        "statusCode" : 400,
-                        "payload" : {
-                            "message" : "Error loading the routes file"
-                        }
-                    }
-                    return responseDispatcher(error);
+                    return responseDispatcher(getError("Error loading the routes file", 400));
                 }
 
                 if(typeof route[request.method + ":" + request.url] != "undefined"){
                     if(typeof route[request.method + ":" + request.url]['rule'] != "undefined"){
                         loader.load(route[request.method + ":" + request.url]['rule'], configValidator, failureHandler);
+                    } else {
+                        return responseDispatcher(null);
                     }
                 } else {
-                    responseDispatcher(null);
+                    return responseDispatcher(null);
                 }
             }
         },
-        setRoutePath : function (path) {
-            config.routePath = path;
+        setRouteFile : function (path) {
+            config.routeFile = path;
         }
     }
 
