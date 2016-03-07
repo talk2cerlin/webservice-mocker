@@ -5,7 +5,7 @@ Webservice Mocker
 
 To run this mocker
 
-1. Define your request and response as per the structure given below
+(1) Define your request and response as per the structure given below
 
     ```json
     {
@@ -33,7 +33,7 @@ To run this mocker
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: Not all http verbs uses payload variable]
 
-2. Define your routes as per the structure given below. Routes are the files which connects the request and the config. 
+(2) Define your routes as per the structure given below. Routes are the files which connects the request and the config. 
 
     ```json
     {
@@ -46,9 +46,9 @@ To run this mocker
     }
     ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: The path should be relative from your root directory]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: The path should be relative from your app's root directory]
 
-3. Create a http server, require the mocker and call the handle method like,
+(3) Create a http server, require the mocker and call the handle method like,
 
     ```javascript
     var http = require('http');
