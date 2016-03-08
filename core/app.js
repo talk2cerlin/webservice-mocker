@@ -47,12 +47,12 @@ module.exports = function(){
             if ( typeof data['payload'] == "object" ){
                 return response.end(JSON.stringify(data['payload']));
             } else {
-                // This will be unreachable code since data will always be set
+                response.setHeader('Content-Type', "application/json");
                 response.statusCode = 404;
                 return response.end(JSON.stringify({"error" : "Route not found"}));
             }
         } else {
-            // This will be unreachable code since data will always be set
+            // TODO: should send default response which is mentioned in routes.json file.
             response.setHeader('Content-Type', "application/json");
             response.statusCode = 404;
             return response.end(JSON.stringify({"error" : "Route not found"}));

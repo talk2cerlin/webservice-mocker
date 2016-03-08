@@ -19,7 +19,7 @@ To run this mocker
         },
         "response" : {
             "headers" : {
-                "content-type" : "application/json"
+                "Content-Type" : "application/json"
             },
             "statusCode" : 201,
             "payload" : {
@@ -70,5 +70,8 @@ This Mocker exposes two methods
 
 #####TODO:
 
-1. Support for file upload 
-2. Support for regex based request payload.
+1. Default response should be configurable by the user.
+2. Variables in URL
+3. Logging all requests and response
+4. Support for file upload 
+5. Support for regex based request payload.
