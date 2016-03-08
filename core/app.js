@@ -63,26 +63,32 @@ module.exports = function(){
             config = parseJson(config);
         }
 
+        var errorMessage = null;
+
         if(config === null){
-            return responseDispatcher(getError("Route found, but error loading in the corresponding config.", 400));
+            errorMessage = "Route found, but error loading in the corresponding config.";
         }
 
         var requestHeaders = request.headers;
 
-        if ( typeof config['request'] === "object" ){
-            if ( typeof config['request']['headers'] === "object" ){
-                for(var header in config['request']['headers']) {
-                    if(typeof requestHeaders[header] === "undefined"){
+        try{
+            for(var header in config['request']['headers']) {
+                if(typeof requestHeaders[header] === "undefined"){
 
-                        return responseDispatcher(getError("One or more header(s) are missing", 400));
+                    errorMessage = "One or more header(s) are missing";
 
-                    } else if(requestHeaders[header].toLowerCase() !== config['request']['headers'][header].toLowerCase()) {
-                        
-                        return responseDispatcher(getError("Header mismatch", 400));
+                } else if(requestHeaders[header].toLowerCase() !== config['request']['headers'][header].toLowerCase()) {
+                    
+                    errorMessage = "Header mismatch";
 
-                    }
                 }
             }
+        } catch(e) {
+            errorMessage = "Schema error in config file";
+        }
+
+        if(errorMessage !== null){
+            return responseDispatcher(getError(errorMessage, 400));
         }
 
         return dispatch(request, config);
@@ -90,29 +96,27 @@ module.exports = function(){
 
     var dispatch = function(request, config){
 
+        var resp = null;
+
         if(request.method === "POST" || request.method === "PUT"){
 
             try {
                 if(isEqual(request.postdata, config['request']['payload'])){
                     if ( typeof config['response'] === "object" && config['response'] !== null){
-                        return responseDispatcher(config['response']);
-                    } else {
-                        return responseDispatcher(null);
+                        resp = config['response'];
                     }
-                } else {
-                    return responseDispatcher(null);
                 }
             } catch (e) {
-                return responseDispatcher(null);
+                resp = null;
             }
-
         } else {
             if ( typeof config['response'] === "object" && config['response'] !== null){
-                return responseDispatcher(config['response']);
-            } else {
-                return responseDispatcher(null);
-            }
+                resp = config['response'];
+            } 
         }
+
+        return responseDispatcher(resp);
+
     }
 
     var failureHandler = function(err){
