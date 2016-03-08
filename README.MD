@@ -60,6 +60,10 @@ To run this mocker
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: If there is any error in loading the routes or config file, the response payload will have the error message.]
 
+After putting files in place, your project will look something similar to the below image.
+
+![Imgur](http://i.imgur.com/2zFw3WO.png)
+
 This Mocker exposes two methods
 
 1. `mocker.handle(reques, response)`
