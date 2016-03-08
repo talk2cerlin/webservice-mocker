@@ -2,3 +2,5 @@ node_modules
 npm*
 test.js
 .eslintrc*
+io/
+routes/
