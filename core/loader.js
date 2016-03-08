@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 var check = function(callback){
-    return (typeof callback === 'function') ? callback : function() {}();
+    return (typeof callback === 'function') ? callback : function() {};
 };
 
 var loader = {
