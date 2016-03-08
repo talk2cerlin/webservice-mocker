@@ -1,5 +1,4 @@
 var loader = require('../core/loader');
-var url  = require('url');
 var isEqual = require('lodash/isEqual');
 
 var config = {
@@ -86,24 +85,27 @@ module.exports = function(){
             }
         }
 
+        return dispatch(request, config);
+    }
+
+    var dispatch = function(request, config){
+
         if(request.method === "POST" || request.method === "PUT"){
-            if ( typeof config['request'] === "object" && config['request'] !== null){
-                if ( typeof config['request']['payload'] === "object" && config['request']['payload'] !== null){
-                    if(isEqual(request.postdata, config['request']['payload'])){
-                        if ( typeof config['response'] === "object" && config['response'] !== null){
-                            return responseDispatcher(config['response']);
-                        } else {
-                            return responseDispatcher(null);
-                        }
+
+            try {
+                if(isEqual(request.postdata, config['request']['payload'])){
+                    if ( typeof config['response'] === "object" && config['response'] !== null){
+                        return responseDispatcher(config['response']);
                     } else {
                         return responseDispatcher(null);
                     }
                 } else {
                     return responseDispatcher(null);
                 }
-            } else {
+            } catch (e) {
                 return responseDispatcher(null);
             }
+
         } else {
             if ( typeof config['response'] === "object" && config['response'] !== null){
                 return responseDispatcher(config['response']);
