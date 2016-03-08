@@ -3,7 +3,11 @@ A simple api mocker which validates the request and respond based on a config fi
 Webservice Mocker
 ======
 
-To run this mocker
+To install
+
+`npm i webservice-mocker`
+
+To run
 
 (1) Define your request and response as per the structure given below
 
@@ -60,7 +64,7 @@ To run this mocker
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: If there is any error in loading the routes or config file, the response payload will have the error message.]
 
-After putting files in place, your project will look something similar to the below image.
+After putting files in place, your project will look something similar to the below image. (ofcourse you can have custom folder name and file name)
 
 ![Imgur](http://i.imgur.com/2zFw3WO.png)
 
