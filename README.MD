@@ -68,7 +68,7 @@ After putting files in place, your project will look something similar to the be
 
 This Mocker exposes two methods
 
-1. `mocker.handle(reques, response)`
+1. `mocker.handle(request, response)`
     Method to handle the request. This method validates header and payload then return the response which is mentioned in routes.json
 
 2. `mocker.setRouteFile('path to the routes file')`
