@@ -4,7 +4,7 @@
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "./index.js",
   "scripts": {
-    "test": "sudo npm install -g mocha && mocha"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "author": "cerlin.selvamony@gmail.com",
   "license": "MIT",
   "devDependencies": {
+    "mocha": "^2.4.5",
     "should": "^8.2.2",
     "supertest": "^1.2.0"
   }
