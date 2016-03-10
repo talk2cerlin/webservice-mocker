@@ -237,7 +237,7 @@ module.exports = function(){
                 if(typeof route[request.method + ":" + request.url] !== "undefined"){
                     if(typeof route[request.method + ":" + request.url]['rule'] !== "undefined"){
                         // Try to load the appropriate config file based on the route
-                        loader.load(route[request.method + ":" + request.url]['rule'], configValidator, failureHandler);
+                        loader.load(route[request.method + ":" + request.url]['rule'], headerValidator, failureHandler);
                     } else {
                         return responseDispatcher(null);
                     }
