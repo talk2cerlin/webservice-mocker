@@ -75,7 +75,7 @@ This Mocker exposes two methods
     Method to force the app to read a different route file
 
 
-###[Feature poll](http://www.easypolls.net/poll.html?p=56e10972e4b07a2c07c17ed1)
+[Feature poll](http://www.easypolls.net/poll.html?p=56e10972e4b07a2c07c17ed1)
 
 #####TODO:
 
