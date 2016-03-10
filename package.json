@@ -4,7 +4,7 @@
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "./index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
