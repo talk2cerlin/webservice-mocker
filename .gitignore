@@ -1,6 +1,6 @@
 node_modules
 ./npm*
-./test.js
+test.js
 .eslintrc*
 io/
 routes/
