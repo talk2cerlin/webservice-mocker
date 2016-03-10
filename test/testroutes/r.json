@@ -1,0 +1,8 @@
+{
+    "GET:/api/v2/user" : {
+        "rule" : "./test/testio/get.json"
+    },
+    "POST:/api/v2/user" : {
+        "rule" : "./test/testio/login.json"
+    }
+}

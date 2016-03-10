@@ -1,0 +1,5 @@
+{
+    "GET:/api/v2/user" : {
+        "rule" : "./test/testio/invalid.json"
+    }
+}

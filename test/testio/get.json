@@ -1,0 +1,19 @@
+{
+    "request" : {
+        "headers" : {
+            "content-type" : "application/json"
+        }
+    },
+    "response" : {
+        "headers" : {
+            "content-type" : "application/json"
+        },
+        "statusCode" : 200,
+        "payload" : {
+            "user" : {
+                "name" : "cerlin"
+            },
+            "message" : "User retrieved successfully"
+        }
+    }
+}

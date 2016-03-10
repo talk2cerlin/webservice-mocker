@@ -1,0 +1,21 @@
+{
+    "request" : {
+        "headers" : {
+            "Content-Type" : "application/json"
+        },
+        "payload" : {
+            "name" : "cerlin",
+            "cerlin": "asdsad"
+        }
+    }
+    "response" : {
+        "headers" : {
+            "content-type" : "application/json"
+        },
+        "statusCode" : 201,
+        "payload" : {
+            "success" : true,
+            "message" : "Successfully logged in"
+        }
+    }
+}
