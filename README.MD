@@ -171,7 +171,7 @@ This Mocker exposes five methods
     This method can be used to register GET or POST or PUT. Previous two methods will call this method internally. 
     [Please refer the example above for request/response structure]
 
-Change Log:
+###Change Log:
 
 ####v0.4.0
 1. Added support for putting data in routes file itself [Json file method is better for organising code for bigger mocking app.]
