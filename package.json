@@ -1,13 +1,13 @@
 {
   "name": "webservice-mocker",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "./index.js",
   "scripts": {
     "test": "mocha"
   },
-  "engines" : { 
-    "npm" : ">0.10"
+  "engines": {
+    "npm": ">0.10"
   },
   "repository": {
     "type": "git",
