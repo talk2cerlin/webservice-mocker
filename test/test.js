@@ -22,7 +22,7 @@ describe('Testing GET request', function(){
 
         it('Should return user object and message', function(done){
             globalDone = done;
-            // This file exists but config file which is mentioned inside doesnt exists
+            
             var path = './test/testroutes/validroute.json';
 
             server = http.createServer(function (req,res) {
@@ -53,7 +53,7 @@ describe('Testing POST request', function(){
 
         it('Should return success flag and message', function(done){
             globalDone = done;
-            // This file exists but config file which is mentioned inside doesnt exists
+            
             var path = './test/testroutes/validroute.json';
 
             server = http.createServer(function (req,res) {
