@@ -47,6 +47,32 @@ To run
         },
         "POST:/api/v2/user" : {
             "rule" : "./[path to file]/login.json"
+        },
+        "GET:/api/v2/posts" : { // You can have inline request/response definition as well
+            "data" : {
+                "request" : {
+                    "headers" : {
+                        "content-type" : "application/json"
+                    }
+                },
+                "response" : {
+                    "headers" : {
+                        "content-type" : "application/json"
+                    },
+                    "statusCode" : 200,
+                    "payload" : {
+                        "posts" : [
+                            {
+                                "name" : "Post 1"
+                            },
+                            {
+                                "name" : "Post 2"
+                            }
+                        ],
+                        "message" : "Posts retrieved successfully"
+                    }
+                }
+            }
         }
     }
 
@@ -72,13 +98,84 @@ After putting files in place, your project will look something similar to the be
 
 ![Imgur](http://i.imgur.com/2zFw3WO.png)
 
-This Mocker exposes two methods
+or simply register your routes using get or post methods [Available from v0.4.0] like metioned below
+
+    var http = require('http');
+    var app = require("webservice-mocker");
+
+
+    var requestObject = {
+        "headers" : {
+            "content-type" : "application/json"
+        }
+    };
+
+    var responseObject = {
+        "headers" : {
+            "content-type" : "application/json"
+        },
+        "statusCode" : 200,
+        "payload" : {
+            "links" : [
+                {
+                    "name" : "Link 1"
+                }
+            ],
+            "message" : "Links retrieved successfully"
+        }
+    };
+
+    var postReqObj = {};
+    postReqObj['headers'] = requestObject['headers'];
+    postReqObj['payload'] = {
+        "name" : "cerlin"
+    }
+    var postResObj = {};
+    postResObj['headers'] = responseObject['headers'];
+    postResObj['payload'] = {
+        "links" : [{
+            "name" : "cerlin"
+        }]
+    }
+
+    app
+        .get('/api/v2/links', requestObject, responseObject)
+        .post('/api/v2/links', postReqObj, postResObj);
+
+    var server = http.createServer(function (req,res) {
+
+        app.handle(req,res);
+
+    });
+
+    server.listen(8080);
+
+
+This Mocker exposes five methods
 
 1. `mocker.handle(request, response)`
     Method to handle the request. This method validates header and payload then return the response which is mentioned in routes.json
 
 2. `mocker.setRouteFile('path to the routes file')`
     Method to force the app to read a different route file
+
+3. `mocker.get(url, requestObj, responseObj)`
+    This method registers your GET request over the rules in routes file. (ie, if routes file is present then this rule will be appended with that else this rule standalone). This method can be used if you dont want to create any routes file and rules/config files. This method should be called before `handle` method
+    [Please refer the example above for request/response structure]
+
+4. `mocker.post(url, requestObj, responseObj)`
+    This method registers your POST request over the rules in routes file. (ie, if routes file is present then this rule will be appended with that else this rule standalone). This method can be used if you dont want to create any routes file and rules/config files. This method should be called before `handle` method
+    [Please refer the example above for request/response structure]
+
+5. `mocker.register(method, url, requestObj, responseObj)`
+    This method can be used to register GET or POST or PUT. Previous two methods will call this method internally. 
+    [Please refer the example above for request/response structure]
+
+Change Log:
+
+####v0.4.0
+1. Added support for putting data in routes file itself [Json file method is better for organising code for bigger mocking app.]
+2. Added methods [get, post and register methods] for better rule registration on the fly.
 
 
 [Feature poll](http://www.easypolls.net/poll.html?p=56e10972e4b07a2c07c17ed1)
