@@ -9,7 +9,7 @@ Webservice Mocker
 
 A simple api mocker which validates the request and respond based on a config file.
 
-[![NPM](https://nodei.co/npm/webservice-mocker.png??compact=true)](https://nodei.co/npm/webservice-mocker/)
+[![NPM](https://nodei.co/npm/webservice-mocker.png?mini=true)](https://nodei.co/npm/webservice-mocker/)
 
 To run
 
