@@ -153,21 +153,21 @@ or simply register your routes using get or post methods [Available from v0.4.0]
 
 This Mocker exposes five methods
 
-1. `mocker.handle(request, response)`
+1. `mocker.handle(request, response)`. 
     Method to handle the request. This method validates header and payload then return the response which is mentioned in routes.json
 
-2. `mocker.setRouteFile('path to the routes file')`
+2. `mocker.setRouteFile('path to the routes file')`. 
     Method to force the app to read a different route file
 
-3. `mocker.get(url, requestObj, responseObj)`
+3. `mocker.get(url, requestObj, responseObj)`. 
     This method registers your GET request over the rules in routes file. (ie, if routes file is present then this rule will be appended with that else this rule standalone). This method can be used if you dont want to create any routes file and rules/config files. This method should be called before `handle` method
     [Please refer the example above for request/response structure]
 
-4. `mocker.post(url, requestObj, responseObj)`
+4. `mocker.post(url, requestObj, responseObj)`. 
     This method registers your POST request over the rules in routes file. (ie, if routes file is present then this rule will be appended with that else this rule standalone). This method can be used if you dont want to create any routes file and rules/config files. This method should be called before `handle` method
     [Please refer the example above for request/response structure]
 
-5. `mocker.register(method, url, requestObj, responseObj)`
+5. `mocker.register(method, url, requestObj, responseObj)`. 
     This method can be used to register GET or POST or PUT. Previous two methods will call this method internally. 
     [Please refer the example above for request/response structure]
 
