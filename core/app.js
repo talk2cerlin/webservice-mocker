@@ -1,11 +1,14 @@
 var loader = require('../core/loader');
 var isEqual = require('lodash/isEqual');
+var isEmpty = require('lodash/isEmpty');
 
 
 // Setting the default configuration
 var config = {
     "routeFile" : "./routes/routes.json"
 }
+
+var registeredRoutes = {};
 
 /**
  * Parses the json string
@@ -169,13 +172,68 @@ module.exports = function(){
     }
 
     /**
+     * Handler which gets executed when the route files are loaded.
+     *
+     * @param {object} Route object passed by loader.
+     * @return {object} Dispatched response object
+     */
+    var appHandler = function(route){
+
+        // Check and parse if the parameter is string
+        if (typeof route === "string") {
+            route = parseJson(route);
+        }
+
+        // Append the registered routes with the loaded routes file.
+
+        if(registeredRoutes !== null && typeof registeredRoutes === "object" && !isEmpty ( registeredRoutes )){
+
+            // If route is null and registeredRoutes is not null, then donot throw error. Instead make route an object and merge that with registeredRoutes
+            if ( route === null) {
+                route = {};
+            }
+
+            for( var registeredRoute in registeredRoutes ) {
+                route[registeredRoute] = registeredRoutes[registeredRoute];
+            }
+        }
+
+        // Send error message if the route is not loaded properly. Route can be null if there is any syntax error in routes.json
+        if(route === null){
+            return responseDispatcher(getError("Error loading the routes file", 400));
+        }
+
+        // Cross validate the request with the routes.json and serve the response.
+        if(typeof route[request.method + ":" + request.url] !== "undefined"){
+            if(typeof route[request.method + ":" + request.url]['rule'] !== "undefined"){
+                // Try to load the appropriate config file based on the route
+                loader.load(route[request.method + ":" + request.url]['rule'], headerValidator, failureHandler);
+
+            } else if(typeof route[request.method + ":" + request.url]['data'] !== "undefined") {
+
+                return headerValidator(route[request.method + ":" + request.url]['data']);
+
+            } else {
+                return responseDispatcher(null);
+            }
+        } else {
+            return responseDispatcher(null);
+        }
+    }
+
+    /**
      * Handler which handles error in file loading.
      *
      * @param {string} Error string which explains why the failurehandler is called.
      * @return {object} Dispatched response object
      */
     var failureHandler = function(err){
-        return responseDispatcher(getError(err, 400));
+
+        if ( isEmpty ( registeredRoutes ) ) {
+            return responseDispatcher(getError(err, 400));
+        } else {
+            return appHandler(null);
+        }
     }
 
     /**
@@ -220,36 +278,35 @@ module.exports = function(){
                 // Load the routes
                 loader.load(config.routeFile, appHandler, failureHandler);
             });
+        },
+        get : function (url, requestObject, responseObject) {
 
-            /**
-             * Handler which gets executed when the route files are loaded.
-             *
-             * @param {object} Route object passed by loader.
-             * @return {object} Dispatched response object
-             */
-            var appHandler = function(route){
+            return this.register("GET", url, requestObject, responseObject);
+            
+        },
+        post : function (url, requestObject, responseObject) {
 
-                // Check and parse if the parameter is string
-                if (typeof route === "string") {
-                    route = parseJson(route);
-                }
+            return this.register("POST", url, requestObject, responseObject);
 
-                // Send error message if the route is not loaded properly. Route can be null if there is any syntax error in routes.json
-                if(route === null){
-                    return responseDispatcher(getError("Error loading the routes file", 400));
-                }
+        },
+        register : function (method, url, requestObject, responseObject) {
 
-                // Cross validate the request with the routes.json and serve the response.
-                if(typeof route[request.method + ":" + request.url] !== "undefined"){
-                    if(typeof route[request.method + ":" + request.url]['rule'] !== "undefined"){
-                        // Try to load the appropriate config file based on the route
-                        loader.load(route[request.method + ":" + request.url]['rule'], headerValidator, failureHandler);
-                    } else {
-                        return responseDispatcher(null);
+            try {
+                var allowedRoutes = ['GET', 'POST', 'PUT'];
+                if(allowedRoutes.indexOf(method.toUpperCase()) !== -1 ){
+
+                    registeredRoutes[method.toUpperCase() + ":" + url] = {
+
+                        "data" : {
+                            "request" : requestObject,
+                            "response" : responseObject
+                        }
+
                     }
-                } else {
-                    return responseDispatcher(null);
+
                 }
+            } finally {
+                return this;
             }
         },
 
