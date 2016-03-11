@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha"
   },
+  "engines" : { 
+    "npm" : ">0.10"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/talk2cerlin/webservice-mocker.git"
