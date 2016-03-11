@@ -4,15 +4,15 @@
             "Content-Type" : "application/json"
         },
         "payload" : {
-            "name" : "cerlin",
-            "cerlin": "asdsad"
+            "username" : "cerlin",
+            "password": "cerlin"
         }
     },
     "response" : {
         "headers" : {
-            "content-type" : "application/json"
+            "Content-Type" : "application/json"
         },
-        "statusCode" : 201,
+        "statusCode" : 200,
         "payload" : {
             "success" : true,
             "message" : "Successfully logged in"

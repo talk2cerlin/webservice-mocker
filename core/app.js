@@ -105,15 +105,21 @@ module.exports = function(){
             errorMessage = "Route found, but error loading in the corresponding config.";
         } else {
 
-            var requestHeaders = request.headers;
+            var requestHeaders = {};
+
+            // Converting all the headers to lowercase.
+            for(var reqheader in request.headers) {
+                requestHeaders[reqheader.toLowerCase()] = request.headers[reqheader];
+            }
 
             try{
                 for(var header in config['request']['headers']) {
-                    if(typeof requestHeaders[header] === "undefined"){
+
+                    if(typeof requestHeaders[header.toLowerCase()] === "undefined"){
 
                         errorMessage = "One or more header(s) are missing";
 
-                    } else if(requestHeaders[header].toLowerCase() !== config['request']['headers'][header].toLowerCase()) {
+                    } else if(requestHeaders[header.toLowerCase()].toLowerCase() !== config['request']['headers'][header].toLowerCase()) {
                         
                         errorMessage = "Header mismatch";
 

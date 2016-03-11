@@ -6,12 +6,6 @@ var should = require('should');
 var server = null;
 var globalDone = null;
 
-// Success tests
-
-
-
-// Failure tests
-
 var endExec = function(err, res){
     server.close();
     if(err)
@@ -20,6 +14,74 @@ var endExec = function(err, res){
         globalDone();
 
 }
+
+// Success tests
+
+describe('Testing GET request', function(){
+    describe('GET /api/v2/user', function(){
+
+        it('Should return user object and message', function(done){
+            globalDone = done;
+            // This file exists but config file which is mentioned inside doesnt exists
+            var path = './test/testroutes/validroute.json';
+
+            server = http.createServer(function (req,res) {
+                app.setRouteFile(path);
+                app.handle(req,res);
+            });
+
+            server.listen(8000);
+
+            supertest(server)
+                .get('/api/v2/user')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .expect(function(res){
+                    var body = res.body;
+                    body.should.be.an.instanceOf(Object);
+                    body.should.have.property('message').be.a.String().equal('User retrieved successfully');
+                    body.should.have.propertyByPath('user', 'name').eql("cerlin");
+                })
+                .end(endExec);
+        });
+    });
+});
+
+describe('Testing POST request', function(){
+    describe('POST /api/v2/user', function(){
+
+        it('Should return success flag and message', function(done){
+            globalDone = done;
+            // This file exists but config file which is mentioned inside doesnt exists
+            var path = './test/testroutes/validroute.json';
+
+            server = http.createServer(function (req,res) {
+                app.setRouteFile(path);
+                app.handle(req,res);
+            });
+
+            server.listen(8000);
+
+            supertest(server)
+                .post('/api/v2/user')
+                .set('Content-Type', 'application/json')
+                .send({"username" : "cerlin", "password": "cerlin"})
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .expect(function(res){
+                    var body = res.body;
+                    // console.log(body);
+                    body.should.be.an.instanceOf(Object);
+                    body.should.have.property('message').be.a.String().equal('Successfully logged in');
+                    body.should.have.property('success', true);
+                })
+                .end(endExec);
+        });
+    });
+});
+
+// Failure tests
 
 describe('GET / with wrong settings (routes and config files)', function(){
 
@@ -46,7 +108,8 @@ describe('GET / with wrong settings (routes and config files)', function(){
                 body.should.have.propertyByPath('message', 'errno').eql(-2);
                 body.should.have.propertyByPath('message', 'path').eql(path);
                 body.should.have.propertyByPath('message', 'code').eql("ENOENT");
-                body.should.have.propertyByPath('message', 'syscall').eql("open");
+                // Commenting this from test since its not supported by node version <=0.12
+                // body.should.have.propertyByPath('message', 'syscall').eql("open");
             })
             .end(endExec);
     });
@@ -75,7 +138,8 @@ describe('GET / with wrong settings (routes and config files)', function(){
                 body.should.have.propertyByPath('message', 'errno').eql(-2);
                 body.should.have.propertyByPath('message', 'path').eql("./test/testio/dummy.json");
                 body.should.have.propertyByPath('message', 'code').eql("ENOENT");
-                body.should.have.propertyByPath('message', 'syscall').eql("open");
+                // Commenting this from test since its not supported by node version <=0.12
+                // body.should.have.propertyByPath('message', 'syscall').eql("open");
             })
             .end(endExec);
     });
