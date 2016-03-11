@@ -1,13 +1,15 @@
 Webservice Mocker
 ======
 
+![Build](https://api.travis-ci.org/talk2cerlin/webservice-mocker.svg)
+
 A simple api mocker which validates the request and respond based on a config file.
 
 [![NPM](https://nodei.co/npm/webservice-mocker.png??compact=true)](https://nodei.co/npm/webservice-mocker/)
 
 To run
 
-(1) Define your request and response as per the structure given below
+(1) Define your request and response as per the structure given below [example: login.json]
 
     {
         "request" : {
@@ -15,8 +17,8 @@ To run
                 "Content-Type" : "application/json"
             },
             "payload" : {
-                "id": 1,
-                "name" : "Cerlin"
+                "username": "Cerlin",
+                "password" : "random"
             }
         },
         "response" : {
@@ -40,7 +42,7 @@ To run
             "rule" : "./[path to file]/user.json"
         },
         "POST:/api/v2/user" : {
-            "rule" : "./[path to file]/update.json"
+            "rule" : "./[path to file]/login.json"
         }
     }
 
