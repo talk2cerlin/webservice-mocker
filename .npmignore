@@ -1,0 +1,9 @@
+node_modules
+./npm*
+test.js
+.eslintrc*
+io/
+routes/
+.travis.yml
+.eslintrc.json
+codeclimate-config.patch

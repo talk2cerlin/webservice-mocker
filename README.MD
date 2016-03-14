@@ -48,7 +48,7 @@ To run
         "POST:/api/v2/user" : {
             "rule" : "./[path to file]/login.json"
         },
-        "GET:/api/v2/posts" : { // You can have inline request/response definition as well
+        "GET:/api/v2/posts" : {
             "data" : {
                 "request" : {
                     "headers" : {
@@ -77,6 +77,7 @@ To run
     }
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: The path should be relative from your app's root directory]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: You can have inline request/response definition as well]
 
 (3) Create a http server, require the mocker and call the handle method like,
 
@@ -153,29 +154,37 @@ or simply register your routes using get or post methods [Available from v0.4.0]
 
 This Mocker exposes five methods
 
-1. `mocker.handle(request, response)`
+1. `mocker.handle(request, response)`. 
     Method to handle the request. This method validates header and payload then return the response which is mentioned in routes.json
 
-2. `mocker.setRouteFile('path to the routes file')`
+2. `mocker.setRouteFile('path to the routes file')`. 
     Method to force the app to read a different route file
 
-3. `mocker.get(url, requestObj, responseObj)`
+3. `mocker.get(url, requestObj, responseObj)`. 
     This method registers your GET request over the rules in routes file. (ie, if routes file is present then this rule will be appended with that else this rule standalone). This method can be used if you dont want to create any routes file and rules/config files. This method should be called before `handle` method
     [Please refer the example above for request/response structure]
 
-4. `mocker.post(url, requestObj, responseObj)`
+4. `mocker.post(url, requestObj, responseObj)`. 
     This method registers your POST request over the rules in routes file. (ie, if routes file is present then this rule will be appended with that else this rule standalone). This method can be used if you dont want to create any routes file and rules/config files. This method should be called before `handle` method
     [Please refer the example above for request/response structure]
 
-5. `mocker.register(method, url, requestObj, responseObj)`
+5. `mocker.register(method, url, requestObj, responseObj)`. 
     This method can be used to register GET or POST or PUT. Previous two methods will call this method internally. 
     [Please refer the example above for request/response structure]
 
 ###Change Log:
 
+####v0.4.1
+1. Code cleanup and minor corrections in README.MD
+
+
 ####v0.4.0
 1. Added support for putting data in routes file itself [Json file method is better for organising code for bigger mocking app.]
 2. Added methods [get, post and register methods] for better rule registration on the fly.
+
+#### Contribution Note
+
+#####1.Pull requests has to be created for dev branch not master as master will have only released code.
 
 
 [Feature poll](http://www.easypolls.net/poll.html?p=56e10972e4b07a2c07c17ed1)
