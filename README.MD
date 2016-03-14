@@ -48,7 +48,7 @@ To run
         "POST:/api/v2/user" : {
             "rule" : "./[path to file]/login.json"
         },
-        "GET:/api/v2/posts" : { // You can have inline request/response definition as well
+        "GET:/api/v2/posts" : {
             "data" : {
                 "request" : {
                     "headers" : {
@@ -77,6 +77,7 @@ To run
     }
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: The path should be relative from your app's root directory]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: You can have inline request/response definition as well]
 
 (3) Create a http server, require the mocker and call the handle method like,
 
