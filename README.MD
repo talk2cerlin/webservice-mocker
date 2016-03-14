@@ -174,6 +174,10 @@ This Mocker exposes five methods
 
 ###Change Log:
 
+####v0.4.1
+1. Code cleanup and minor corrections in README.MD
+
+
 ####v0.4.0
 1. Added support for putting data in routes file itself [Json file method is better for organising code for bigger mocking app.]
 2. Added methods [get, post and register methods] for better rule registration on the fly.
