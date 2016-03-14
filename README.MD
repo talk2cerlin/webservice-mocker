@@ -178,6 +178,10 @@ This Mocker exposes five methods
 1. Added support for putting data in routes file itself [Json file method is better for organising code for bigger mocking app.]
 2. Added methods [get, post and register methods] for better rule registration on the fly.
 
+#### Contribution Note
+
+#####1.Pull requests has to be created for dev branch not master as master will have only released code.
+
 
 [Feature poll](http://www.easypolls.net/poll.html?p=56e10972e4b07a2c07c17ed1)
 
