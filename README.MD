@@ -4,6 +4,7 @@ Webservice Mocker
 ![Build](https://api.travis-ci.org/talk2cerlin/webservice-mocker.svg)
 ![Version](https://img.shields.io/npm/v/webservice-mocker.svg)
 ![Downloads](https://img.shields.io/npm/dm/webservice-mocker.svg)
+![Total Downloads](https://img.shields.io/npm/dt/webservice-mocker.svg)
 ![Dependencies](https://david-dm.org/talk2cerlin/webservice-mocker.svg)
 ![devDependencies](https://david-dm.org/talk2cerlin/webservice-mocker/dev-status.svg)
 
@@ -102,7 +103,7 @@ After putting files in place, your project will look something similar to the be
 or simply register your routes using get or post methods [Available from v0.4.0] like metioned below
 
     var http = require('http');
-    var app = require("webservice-mocker");
+    var mocker = require("webservice-mocker");
 
 
     var requestObject = {
@@ -139,13 +140,16 @@ or simply register your routes using get or post methods [Available from v0.4.0]
         }]
     }
 
-    app
+    mocker
         .get('/api/v2/links', requestObject, responseObject)
         .post('/api/v2/links', postReqObj, postResObj);
 
     var server = http.createServer(function (req,res) {
 
-        app.handle(req,res);
+        // use mocker.enableCors() .
+            This method is to enable Cross Domain Request Sharingto enable cross domain resourse sharing.
+        // If CORS is enabled, the server will respond for requests with OPTIONS as method.
+        mocker.handle(req,res);
 
     });
 
@@ -172,7 +176,16 @@ This Mocker exposes five methods
     This method can be used to register GET or POST or PUT. Previous two methods will call this method internally. 
     [Please refer the example above for request/response structure]
 
+6. `mocker.enableCors()`.
+    This method is to enable Cross Domain Request Sharing
+
+7. `mocker.disableCors()`.
+    This method is to disable Cross Domain Request Sharing
+
 ###Change Log:
+
+####v0.5
+1. Added options to enable and disable CORS.
 
 ####v0.4.1
 1. Code cleanup and minor corrections in README.MD
