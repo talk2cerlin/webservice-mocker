@@ -4,6 +4,7 @@ Webservice Mocker
 ![Build](https://api.travis-ci.org/talk2cerlin/webservice-mocker.svg)
 ![Version](https://img.shields.io/npm/v/webservice-mocker.svg)
 ![Downloads](https://img.shields.io/npm/dm/webservice-mocker.svg)
+![Total Downloads](https://img.shields.io/npm/dt/webservice-mocker.svg)
 ![Dependencies](https://david-dm.org/talk2cerlin/webservice-mocker.svg)
 ![devDependencies](https://david-dm.org/talk2cerlin/webservice-mocker/dev-status.svg)
 
@@ -102,7 +103,8 @@ After putting files in place, your project will look something similar to the be
 or simply register your routes using get or post methods [Available from v0.4.0] like metioned below
 
     var http = require('http');
-    var app = require("webservice-mocker");
+    var mocker = require("webservice-mocker");
+    mocker.enableLogs(); // Should be the first method, so that all the actions will be logged.
 
 
     var requestObject = {
@@ -139,13 +141,16 @@ or simply register your routes using get or post methods [Available from v0.4.0]
         }]
     }
 
-    app
+    mocker
         .get('/api/v2/links', requestObject, responseObject)
         .post('/api/v2/links', postReqObj, postResObj);
 
     var server = http.createServer(function (req,res) {
 
-        app.handle(req,res);
+        // use mocker.enableCors() .
+            This method is to enable Cross Domain Request Sharingto enable cross domain resourse sharing.
+        // If CORS is enabled, the server will respond for requests with OPTIONS as method.
+        mocker.handle(req,res);
 
     });
 
@@ -172,7 +177,31 @@ This Mocker exposes five methods
     This method can be used to register GET or POST or PUT. Previous two methods will call this method internally. 
     [Please refer the example above for request/response structure]
 
+6. `mocker.enableCors()`.
+    This method is to enable Cross Domain Request Sharing . [Available from v0.5.0]
+
+7. `mocker.disableCors()`.
+    This method is to disable Cross Domain Request Sharing . [Available from v0.5.0]
+
+8. `mocker.enableLogs()`.
+    This method is to enable logs to be written in console. [Available from v0.6.0]. This method should be called just after requiring all the packages.
+
+9. `mocker.disableLogs()`.
+    This method is to disable logs to be written in console. [Available from v0.6.0]
+
 ###Change Log:
+
+####v0.6.1
+1. Minor document update.
+
+####v0.6.0
+1. Added options to enable and disable logging info in console.
+
+####v0.5.1
+1. Minor patch in CORS feature.
+
+####v0.5.0
+1. Added options to enable and disable CORS.
 
 ####v0.4.1
 1. Code cleanup and minor corrections in README.MD
@@ -193,6 +222,6 @@ This Mocker exposes five methods
 
 1. Default response should be configurable by the user.
 2. Variables in URL
-3. Logging all requests and response
+3. ~~Logging all requests and response in console~~
 4. Support for file upload 
 5. Support for regex based request payload.

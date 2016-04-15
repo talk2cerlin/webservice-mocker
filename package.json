@@ -1,6 +1,6 @@
 {
   "name": "webservice-mocker",
-  "version": "0.4.1",
+  "version": "0.6.1",
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "./index.js",
   "scripts": {
@@ -20,7 +20,9 @@
     "webservice"
   ],
   "dependencies": {
-    "lodash": "^4.6.1"
+    "lodash": "^4.6.1",
+    "prettyjson": "^1.1.3",
+    "colors": "^1.1.2"
   },
   "author": "cerlin.selvamony@gmail.com",
   "license": "MIT",
