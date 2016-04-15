@@ -177,14 +177,26 @@ This Mocker exposes five methods
     [Please refer the example above for request/response structure]
 
 6. `mocker.enableCors()`.
-    This method is to enable Cross Domain Request Sharing
+    This method is to enable Cross Domain Request Sharing . [Available from v0.5.0]
 
 7. `mocker.disableCors()`.
-    This method is to disable Cross Domain Request Sharing
+    This method is to disable Cross Domain Request Sharing . [Available from v0.5.0]
+
+8. `mocker.enableLogs()`.
+    This method is to enable logs to be written in console. [Available from v0.6.0]
+
+9. `mocker.disableLogs()`.
+    This method is to disable logs to be written in console. [Available from v0.6.0]
 
 ###Change Log:
 
-####v0.5
+####v0.6.0
+1. Added options to enable and disable logging info in console.
+
+####v0.5.1
+1. Minor patch in CORS feature.
+
+####v0.5.0
 1. Added options to enable and disable CORS.
 
 ####v0.4.1
@@ -206,6 +218,6 @@ This Mocker exposes five methods
 
 1. Default response should be configurable by the user.
 2. Variables in URL
-3. Logging all requests and response
+3. ~~Logging all requests and response in console~~
 4. Support for file upload 
 5. Support for regex based request payload.

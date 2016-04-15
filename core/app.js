@@ -1,14 +1,47 @@
 var loader = require('../core/loader');
 var isEqual = require('lodash/isEqual');
 var isEmpty = require('lodash/isEmpty');
+var prettyJson = require('prettyjson');
+var colors = require('colors/safe');
 
-
-// Setting the default configuration
+/**
+ * Default configuration for the mocker
+**/
 var config = {
     "routeFile" : "./routes/routes.json",
-    "cors" : false
+    "cors" : false,
+    "logs" : false
 }
+ 
+/**
+ * Options for prettyJson
+**/
+var options = {
+    keysColor: 'blue',
+    dashColor: 'white',
+    stringColor: 'green',
+    numberColor: 'cyan'
+};
+ 
+/**
+ * Setting default theme for colors plugin.
+**/
+colors.setTheme({
+    silly: 'rainbow',
+    input: 'grey',
+    verbose: 'cyan',
+    prompt: 'grey',
+    info: 'green',
+    data: 'grey',
+    help: 'cyan',
+    warn: 'yellow',
+    debug: 'blue',
+    error: 'red'
+});
 
+/**
+ * Routes which are registered on the fly using get, post and register methods.
+**/
 var registeredRoutes = {};
 
 /**
@@ -44,6 +77,37 @@ var getError = function(message, statuscode){
     }
 }
 
+/**
+ * Custom logger which logs data in console.
+ * Also does data preparation before loggin.
+**/
+var log = {
+
+    json: function(data){
+        (config.logs) ? console.log("{\n" + prettyJson.render(data, options, 4) + "\n}") : "";
+    },
+
+    info: function(message){
+        (config.logs) ? console.log(colors.info(message)) : "";
+    },
+
+    error: function(message){
+        (config.logs) ? console.log(colors.error(message)) : "";
+    },
+
+    warn: function(message){
+        (config.logs) ? console.log(colors.warn(message)) : "";
+    },
+
+    silly: function(message){
+        (config.logs) ? console.log(colors.silly(message)) : "";
+    },
+
+    newLine: function(){
+        console.log("\n");
+    }
+}
+
 // Exposing the method to outer world
 
 module.exports = function(){
@@ -74,15 +138,24 @@ module.exports = function(){
             }
             // Set the status code
             if(typeof data['statusCode'] !== "undefined"){
+
                 response.statusCode = data['statusCode'];
+
             }
             //Send the payload as per the config file.
             if ( typeof data['payload'] === "object" ){
+
+                log.info('Request is served with: ');
+                log.json(data);
+                log.silly("*************************************************************************************");
                 return response.end(JSON.stringify(data['payload']));
+
             } else {
+
                 response.setHeader('Content-Type', "application/json");
                 response.statusCode = 404;
                 return response.end(JSON.stringify({"error" : "Route not found"}));
+
             }
         } else {
             // TODO: should send default response which is mentioned in routes.json file.
@@ -154,6 +227,10 @@ module.exports = function(){
         if(request.method === "POST" || request.method === "PUT"){
 
             try {
+
+                log.info('Requested payload is: ');
+                log.json(request.postdata);
+
                 if(isEqual(request.postdata, config['request']['payload'])){
                     if ( typeof config['response'] === "object" && config['response'] !== null){
                         resp = config['response'];
@@ -199,19 +276,29 @@ module.exports = function(){
             }
         }
 
+        // log the requested json
+        log.info("Registered routes are : ");
+        log.json(route);
+
         // Send error message if the route is not loaded properly. Route can be null if there is any syntax error in routes.json
         if(route === null){
             return responseDispatcher(getError("Error loading the routes file", 400));
         }
 
+
+        log.info("Requested route is - " + request.method + ":" + request.url);
+
         // Cross validate the request with the routes.json and serve the response.
         if(typeof route[request.method + ":" + request.url] !== "undefined"){
             if(typeof route[request.method + ":" + request.url]['rule'] !== "undefined"){
+
+                log.info("Config file found for route - " + request.method + ":" + request.url);
                 // Try to load the appropriate config file based on the route
                 loader.load(route[request.method + ":" + request.url]['rule'], headerValidator, failureHandler);
 
             } else if(typeof route[request.method + ":" + request.url]['data'] !== "undefined") {
 
+                log.info("Route definition found for route - " + request.method + ":" + request.url);
                 return headerValidator(route[request.method + ":" + request.url]['data']);
 
             } else {
@@ -255,16 +342,19 @@ module.exports = function(){
          */
         handle : function (req, res) {
 
+            log.info('Request received.. ');
+
             // Exposing request and response to other methods
             request = req;
             response = res;
 
             // Check if cors is enabled for the user.
-            if(config.cors === true){
+            if(config.cors){
                 response.setHeader('Access-Control-Allow-Origin', "*");
                 response.setHeader('Access-Control-Allow-Methods', "GET, POST, PUT, DELETE");
                 response.setHeader('Access-Control-Allow-Headers', "Accept, Accept-CH, Accept-Charset, Accept-Datetime, Accept-Encoding, Accept-Ext, Accept-Features, Accept-Language, Accept-Params, Accept-Ranges, Access-Control-Allow-Credentials, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Expose-Headers, Access-Control-Max-Age, Access-Control-Request-Headers, Access-Control-Request-Method, Age, Allow, Alternates, Authentication-Info, Authorization, C-Ext, C-Man, C-Opt, C-PEP, C-PEP-Info, CONNECT, Cache-Control, Compliance, Connection, Content-Base, Content-Disposition, Content-Encoding, Content-ID, Content-Language, Content-Length, Content-Location, Content-MD5, Content-Range, Content-Script-Type, Content-Security-Policy, Content-Style-Type, Content-Transfer-Encoding, Content-Type, Content-Version, Cookie, Cost, DAV, DELETE, DNT, DPR, Date, Default-Style, Delta-Base, Depth, Derived-From, Destination, Differential-ID, Digest, ETag, Expect, Expires, Ext, From, GET, GetProfile, HEAD, HTTP-date, Host, IM, If, If-Match, If-Modified-Since, If-None-Match, If-Range, If-Unmodified-Since, Keep-Alive, Label, Last-Event-ID, Last-Modified, Link, Location, Lock-Token, MIME-Version, Man, Max-Forwards, Media-Range, Message-ID, Meter, Negotiate, Non-Compliance, OPTION, OPTIONS, OWS, Opt, Optional, Ordering-Type, Origin, Overwrite, P3P, PEP, PICS-Label, POST, PUT, Pep-Info, Permanent, Position, Pragma, ProfileObject, Protocol, Protocol-Query, Protocol-Request, Proxy-Authenticate, Proxy-Authentication-Info, Proxy-Authorization, Proxy-Features, Proxy-Instruction, Public, RWS, Range, Referer, Refresh, Resolution-Hint, Resolver-Location, Retry-After, Safe, Sec-Websocket-Extensions, Sec-Websocket-Key, Sec-Websocket-Origin, Sec-Websocket-Protocol, Sec-Websocket-Version, Security-Scheme, Server, Set-Cookie, Set-Cookie2, SetProfile, SoapAction, Status, Status-URI, Strict-Transport-Security, SubOK, Subst, Surrogate-Capability, Surrogate-Control, TCN, TE, TRACE, Timeout, Title, Trailer, Transfer-Encoding, UA-Color, UA-Media, UA-Pixels, UA-Resolution, UA-Windowpixels, URI, Upgrade, User-Agent, Variant-Vary, Vary, Version, Via, Viewport-Width, WWW-Authenticate, Want-Digest, Warning, Width, X-Content-Duration, X-Content-Security-Policy, X-Content-Type-Options, X-CustomHeader, X-DNSPrefetch-Control, X-Forwarded-For, X-Forwarded-Port, X-Forwarded-Proto, X-Frame-Options, X-Modified, X-OTHER, X-PING, X-PINGOTHER, X-Powered-By, X-Requested-With, " + Object.keys(request.headers).join(', '));
                 if(request.method == "OPTIONS") {
+                    log.info('CORS request detected.');
                     return response.end();
                 }
             }
@@ -317,6 +407,7 @@ module.exports = function(){
 
                 }
             } finally {
+                log.info("Route \"" + method.toUpperCase() + ":" + url + "\"" + "is registered.");
                 return this;
             }
         },
@@ -329,6 +420,7 @@ module.exports = function(){
          */
         setRouteFile : function (path) {
             config.routeFile = path;
+            log.info("Route file is pointed to " + path);
         },
 
         /**
@@ -338,6 +430,7 @@ module.exports = function(){
          */
         enableCors : function () {
             config.cors = true;
+            log.info("Cross Domain Request Sharing is enabled.");
         },
 
         /**
@@ -347,6 +440,27 @@ module.exports = function(){
          */
         disableCors : function () {
             config.cors = false;
+            log.info("Cross Domain Request Sharing is disabled.");
+        },
+
+        /**
+         * Method to enable logs to be printed in console.
+         *
+         * @return {void}
+         */
+        enableLogs : function () {
+            config.logs = true;
+            log.info("Logs are enabled.");
+        },
+
+        /**
+         * Method to disable logs to be printed in console.
+         *
+         * @return {void}
+         */
+        disableLogs : function () {
+            config.logs = false;
+            log.info("Logs are disabled.");
         }
     }
 
