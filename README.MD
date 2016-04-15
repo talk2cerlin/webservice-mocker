@@ -104,6 +104,7 @@ or simply register your routes using get or post methods [Available from v0.4.0]
 
     var http = require('http');
     var mocker = require("webservice-mocker");
+    mocker.enableLogs(); // Should be the first method, so that all the actions will be logged.
 
 
     var requestObject = {
@@ -183,12 +184,15 @@ This Mocker exposes five methods
     This method is to disable Cross Domain Request Sharing . [Available from v0.5.0]
 
 8. `mocker.enableLogs()`.
-    This method is to enable logs to be written in console. [Available from v0.6.0]
+    This method is to enable logs to be written in console. [Available from v0.6.0]. This method should be called just after requiring all the packages.
 
 9. `mocker.disableLogs()`.
     This method is to disable logs to be written in console. [Available from v0.6.0]
 
 ###Change Log:
+
+####v0.6.1
+1. Minor document update.
 
 ####v0.6.0
 1. Added options to enable and disable logging info in console.
