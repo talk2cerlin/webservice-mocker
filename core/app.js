@@ -44,6 +44,9 @@ colors.setTheme({
 **/
 var registeredRoutes = {};
 
+    
+var tokenVars = {};
+
 /**
  * Parses the json string
  *
@@ -145,9 +148,18 @@ module.exports = function(){
             //Send the payload as per the config file.
             if ( typeof data['payload'] === "object" ){
 
+                data = JSON.stringify(data);
+
+                for (var token in tokenVars) {
+                    data = data.replace( ":" + token, tokenVars[token]);
+                }
+
+                data = parseJson(data);
+
                 log.info('Request is served with: ');
                 log.json(data);
                 log.silly("*************************************************************************************");
+
                 return response.end(JSON.stringify(data['payload']));
 
             } else {
@@ -235,6 +247,8 @@ module.exports = function(){
                     if ( typeof config['response'] === "object" && config['response'] !== null){
                         resp = config['response'];
                     }
+                } else {
+                    resp = getError("Payload is not matching.", 400);
                 }
             } catch (e) {
                 resp = null;
@@ -250,12 +264,66 @@ module.exports = function(){
     }
 
     /**
+     * Method to validate the url with registered routes.
+     *
+     * @param {string} Route URL to validate.
+     * @param {string} Request URL from client to validate.
+     * @return {object} Dispatched response object
+     */
+    var isValid = function(RouteURL, RequestURL){
+
+        var flag = true;
+
+        RouteURL = RouteURL.toLowerCase();
+        RequestURL = RequestURL.toLowerCase();
+
+        RouteURL = RouteURL.split('/');
+        RequestURL = RequestURL.split('/');
+
+        // Throw error, If http verb doesnt match
+        if ((RouteURL.shift() !== RequestURL.shift()) || RouteURL.length !== RequestURL.length)
+            flag = false;
+
+        if (flag) {
+
+            for (var index in RouteURL) {
+
+                if(RouteURL[index] && RouteURL[index].indexOf(':') !== -1) {
+
+                    try {
+                        if (RequestURL[index]) {
+                            tokenVars[RouteURL[index].substr(1)] = RequestURL[index];
+                        } else {
+
+                            // Reset the token
+                            tokenVars = {};
+                            flag = false;
+                        }
+                    } catch (exception) {
+                        flag = false;
+                    }
+
+                } else if(RouteURL[index] !== RequestURL[index]) {
+                    
+                    flag = false;
+                    
+                }
+            }
+        }
+
+        return flag;
+    }
+
+    /**
      * Handler which gets executed when the route files are loaded.
      *
      * @param {object} Route object passed by loader.
      * @return {object} Dispatched response object
      */
     var appHandler = function(route){
+
+        // Empty the global tokens
+        tokenVars = {};
 
         // Check and parse if the parameter is string
         if (typeof route === "string") {
@@ -290,20 +358,45 @@ module.exports = function(){
 
         // Cross validate the request with the routes.json and serve the response.
         if(typeof route[request.method + ":" + request.url] !== "undefined"){
-            if(typeof route[request.method + ":" + request.url]['rule'] !== "undefined"){
 
-                log.info("Config file found for route - " + request.method + ":" + request.url);
-                // Try to load the appropriate config file based on the route
-                loader.load(route[request.method + ":" + request.url]['rule'], headerValidator, failureHandler);
+            return routeIt(route, request.method + ":" + request.url);
 
-            } else if(typeof route[request.method + ":" + request.url]['data'] !== "undefined") {
+        } else {
 
-                log.info("Route definition found for route - " + request.method + ":" + request.url);
-                return headerValidator(route[request.method + ":" + request.url]['data']);
+            var routeKeys = Object.keys(route);
 
-            } else {
-                return responseDispatcher(null);
+            for (var singleRoute in routeKeys) {
+
+                if (isValid(routeKeys[singleRoute], request.method + ":" + request.url)) {
+
+                    return routeIt(route, routeKeys[singleRoute]);
+
+                }
             }
+
+            return responseDispatcher(null);
+        }
+    }
+
+    /**
+     * This method finds the route definition and responds
+     *
+     * @param {object} Route object passed by app handler.
+     * @param {string} URL key.
+     * @return {object} Dispatched response object
+     **/
+    var routeIt = function(route, key){
+        if(typeof route[key]['rule'] !== "undefined"){
+
+            log.info("Config file found for route - " + request.method + ":" + request.url);
+            // Try to load the appropriate config file based on the route
+            loader.load(route[key]['rule'], headerValidator, failureHandler);
+
+        } else if(typeof route[key]['data'] !== "undefined") {
+
+            log.info("Route definition found for route - " + request.method + ":" + request.url);
+            return headerValidator(route[key]['data']);
+
         } else {
             return responseDispatcher(null);
         }
