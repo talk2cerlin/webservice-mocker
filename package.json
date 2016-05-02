@@ -27,6 +27,8 @@
   "author": "cerlin.selvamony@gmail.com",
   "license": "MIT",
   "devDependencies": {
+    "blanket": "^1.2.3",
+    "istanbul": "^0.4.3",
     "mocha": "^2.4.5",
     "should": "^8.2.2",
     "supertest": "^1.2.0"
