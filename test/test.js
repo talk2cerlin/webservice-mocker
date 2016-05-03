@@ -215,6 +215,37 @@ describe('Testing GET request', function(){
                 .end(endExec);
         });
     });
+
+    describe('GET /api/v2/user/:id with dynamic id value', function(){
+
+        it('Should return id variable in response payload', function(done){
+            globalDone = done;
+
+            var path = './test/testroutes/validroute.json';
+
+            server = http.createServer(function (req,res) {
+                app.handle(req,res);
+                app.setRouteFile(path);
+            });
+
+            server.listen(8000);
+
+            var id = Math.ceil(Math.random() * 100);
+
+            supertest(server)
+                .get('/api/v2/user/' + id)
+                .set('Content-Type', 'application/vnd.api+json')
+                .expect(200)
+                .expect('Content-Type', "application/vnd.api+json")
+                .expect(function(res){
+                    var body = res.body;
+                    body.should.be.an.instanceOf(Object);
+                    body.should.have.property('name').be.a.String().eql("cerlin");
+                    body.should.have.property('id').eql(id.toString());
+                })
+                .end(endExec);
+        });
+    });
 });
 
 describe('Testing POST request', function(){
@@ -286,6 +317,40 @@ describe('Testing POST request', function(){
                     body.should.be.an.instanceOf(Object);
                     body.should.have.property('links').be.a.Array().and.have.lengthOf(1);
                     // body.should.have.propertyByPath('user', 'name').eql("cerlin");
+                })
+                .end(endExec);
+        });
+    });
+
+    describe('POST /api/v2/user/:id/:name with dynamic id and name value', function(){
+
+        it('Should return id and name in response payload', function(done){
+            globalDone = done;
+
+            var path = './test/testroutes/validroute.json';
+
+            server = http.createServer(function (req,res) {
+                app.handle(req,res);
+                app.setRouteFile(path);
+            });
+
+            server.listen(8000);
+
+            // Random generators which generates random ID and random Name
+            var id = Math.ceil(Math.random() * 100);
+            var name = (Math.random() + 1).toString(36).substring(10);
+
+            supertest(server)
+                .post('/api/v2/user/' + id + "/" + name)
+                .set('Content-Type', 'application/vnd.api+json')
+                .send({"fake" : "data"})
+                .expect(200)
+                .expect('Content-Type', "application/vnd.api+json")
+                .expect(function(res){
+                    var body = res.body;
+                    body.should.be.an.instanceOf(Object);
+                    body.should.have.property('name').be.a.String().eql(name);
+                    body.should.have.property('id').eql(id.toString());
                 })
                 .end(endExec);
         });
