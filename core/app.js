@@ -280,6 +280,7 @@ module.exports = function(){
         RouteURL = RouteURL.split('/');
         RequestURL = RequestURL.split('/');
 
+        // Remove empty values
         RequestURL = RequestURL.filter(Boolean);
 
         // Throw error, If http verb doesnt match or request url segment count and route url segment count doesnt match
