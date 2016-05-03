@@ -241,7 +241,7 @@ describe('Testing GET request', function(){
                     var body = res.body;
                     body.should.be.an.instanceOf(Object);
                     body.should.have.property('name').be.a.String().eql("cerlin");
-                    body.should.have.property('id').eql(id.toString());
+                    body.should.have.property('id').eql(id);
                 })
                 .end(endExec);
         });
@@ -350,7 +350,7 @@ describe('Testing POST request', function(){
                     var body = res.body;
                     body.should.be.an.instanceOf(Object);
                     body.should.have.property('name').be.a.String().eql(name);
-                    body.should.have.property('id').eql(id.toString());
+                    body.should.have.property('id').eql(id);
                 })
                 .end(endExec);
         });
