@@ -4,5 +4,46 @@
     },
     "POST:/api/v2/user" : {
         "rule" : "./test/testio/login.json"
+    },
+    "GET:/api/v2/user/:id" : {
+        "data" : {
+            "request" : {
+                "headers" : {
+                    "Content-Type" : "application/vnd.api+json"
+                }
+            },
+            "response" : {
+                "headers" : {
+                    "Content-Type" : "application/vnd.api+json"
+                },
+                "statusCode" : 200,
+                "payload" : {
+                    "name" : "cerlin",
+                    "id" : ":id"
+                }
+            }
+        }
+    },
+    "POST:/api/v2/user/:id/:name" : {
+        "data" : {
+            "request" : {
+                "headers" : {
+                    "Content-Type" : "application/vnd.api+json"
+                },
+                "payload" : {
+                    "fake" : "data"
+                }
+            },
+            "response" : {
+                "headers" : {
+                    "Content-Type" : "application/vnd.api+json"
+                },
+                "statusCode" : 200,
+                "payload" : {
+                    "name" : ":name",
+                    "id" : ":id"
+                }
+            }
+        }
     }
 }

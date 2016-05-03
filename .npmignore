@@ -7,3 +7,4 @@ routes/
 .travis.yml
 .eslintrc.json
 codeclimate-config.patch
+/coverage
