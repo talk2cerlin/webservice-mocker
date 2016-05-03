@@ -151,7 +151,14 @@ module.exports = function(){
                 data = JSON.stringify(data);
 
                 for (var token in tokenVars) {
-                    data = data.replace( ":" + token, tokenVars[token]);
+
+                    var replaceToken = ":" + token;
+
+                    if ( (tokenVars[token] - parseFloat( tokenVars[token] ) + 1) >= 0 ){
+                        tokenVars[token] = parseInt(tokenVars[token],10);
+                        replaceToken = "\"" + replaceToken + "\"";
+                    }
+                    data = data.replace(replaceToken, tokenVars[token]);
                 }
 
                 data = parseJson(data);
