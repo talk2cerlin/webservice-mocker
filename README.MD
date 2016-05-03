@@ -12,6 +12,10 @@ A simple api mocker which validates the request and respond based on a config fi
 
 [![NPM](https://nodei.co/npm/webservice-mocker.png?mini=true)](https://nodei.co/npm/webservice-mocker/)
 
+#####Whats new?
+
+Usage of variables in Route URL and response payload
+
 To run
 
 (1) Define your request and response as per the structure given below [example: login.json]
@@ -74,11 +78,34 @@ To run
                     }
                 }
             }
+        },
+        "POST:/api/v2/user/:id/:name" : {
+            "data" : {
+                "request" : {
+                    "headers" : {
+                        "Content-Type" : "application/vnd.api+json"
+                    },
+                    "payload" : {
+                        "fake" : "data"
+                    }
+                },
+                "response" : {
+                    "headers" : {
+                        "Content-Type" : "application/vnd.api+json"
+                    },
+                    "statusCode" : 200,
+                    "payload" : {
+                        "name" : ":name",
+                        "id" : ":id"
+                    }
+                }
+            }
         }
     }
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: The path should be relative from your app's root directory]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Note: You can have inline request/response definition as well]
+[Note: The path should be relative from your app's root directory]
+[Note: You can have inline request/response definition as well]
+[Note: Now you can use variables in URL. Ofcourse the variables can be used in RESPONSE payload]
 
 (3) Create a http server, require the mocker and call the handle method like,
 
@@ -141,9 +168,22 @@ or simply register your routes using get or post methods [Available from v0.4.0]
         }]
     }
 
+    var getReqObj = {};
+    getReqObj['headers'] = requestObject['headers'];
+
+    var getNewResObj = {}; 
+    getNewResObj['headers'] = responseObject['headers'];
+    getNewResObj['payload'] = {
+        "links" : [{
+            "name" : "cerlin",
+            "id" : ":id"
+        }]
+    }
+
     mocker
         .get('/api/v2/links', requestObject, responseObject)
-        .post('/api/v2/links', postReqObj, postResObj);
+        .post('/api/v2/links', postReqObj, postResObj)
+        .get('/api/v2/user/:id', getReqObj, getNewResObj);
 
     var server = http.createServer(function (req,res) {
 
@@ -191,6 +231,9 @@ This Mocker exposes five methods
 
 ###Change Log:
 
+####v0.7.0
+1. Much awaited variables in URL and in Response payload.
+
 ####v0.6.1
 1. Minor document update.
 
@@ -221,7 +264,7 @@ This Mocker exposes five methods
 #####TODO:
 
 1. Default response should be configurable by the user.
-2. Variables in URL
+2. ~~Variables in URL
 3. ~~Logging all requests and response in console~~
 4. Support for file upload 
 5. Support for regex based request payload.
