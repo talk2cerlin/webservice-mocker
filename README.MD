@@ -187,8 +187,7 @@ or simply register your routes using get or post methods [Available from v0.4.0]
 
     var server = http.createServer(function (req,res) {
 
-        // use mocker.enableCors() .
-            This method is to enable Cross Domain Request Sharingto enable cross domain resourse sharing.
+        // use mocker.enableCors() to enable Cross Domain Request Sharing.
         // If CORS is enabled, the server will respond for requests with OPTIONS as method.
         mocker.handle(req,res);
 
