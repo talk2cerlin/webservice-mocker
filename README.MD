@@ -230,6 +230,12 @@ This Mocker exposes five methods
 
 ###Change Log:
 
+####v0.7.2
+1. SEO
+
+####v0.7.1
+1. Minor document correction
+
 ####v0.7.0
 1. Much awaited variables in URL and in Response payload.
 
