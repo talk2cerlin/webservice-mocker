@@ -14,10 +14,14 @@
     "url": "https://github.com/talk2cerlin/webservice-mocker.git"
   },
   "keywords": [
+    "mock",
+    "api",
+    "api mock",
     "mocker",
     "webservicemocker",
     "apimocker",
-    "webservice"
+    "webservice",
+    "fakewebservice"
   ],
   "dependencies": {
     "lodash": "^4.6.1",
