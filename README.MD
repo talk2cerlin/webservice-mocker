@@ -196,7 +196,7 @@ or simply register your routes using get or post methods [Available from v0.4.0]
     server.listen(8080);
 
 
-This Mocker exposes five methods
+This Mocker exposes Nine methods
 
 1. `mocker.handle(request, response)`. 
     Method to handle the request. This method validates header and payload then return the response which is mentioned in routes.json
@@ -230,6 +230,9 @@ This Mocker exposes five methods
 
 ###Change Log:
 
+####v0.7.3
+1. Minor Document correction
+
 ####v0.7.2
 1. SEO
 
@@ -254,7 +257,6 @@ This Mocker exposes five methods
 ####v0.4.1
 1. Code cleanup and minor corrections in README.MD
 
-
 ####v0.4.0
 1. Added support for putting data in routes file itself [Json file method is better for organising code for bigger mocking app.]
 2. Added methods [get, post and register methods] for better rule registration on the fly.
@@ -269,7 +271,7 @@ This Mocker exposes five methods
 #####TODO:
 
 1. Default response should be configurable by the user.
-2. ~~Variables in URL
+2. ~~Variables in URL~~
 3. ~~Logging all requests and response in console~~
 4. Support for file upload 
 5. Support for regex based request payload.
