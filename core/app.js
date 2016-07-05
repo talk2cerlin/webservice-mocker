@@ -522,6 +522,18 @@ module.exports = function(){
             }
         },
 
+        setDefaultResponse : function(responseObj){
+            if(typeof responseObj['headers'] !== "undefined" && typeof responseObj['payload'] !== "undefined" ) {
+                config.default = responseObj;
+
+                // log the registered default object
+                log.info("Registered default object is : ");
+                log.json(config.default);
+            } else {
+                log.error("Default object structure is incorrect.!!");
+            }
+        },
+
         /**
          * Method to set the route file location. Default location is ./routes/routes.json
          *
