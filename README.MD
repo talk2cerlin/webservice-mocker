@@ -196,7 +196,7 @@ or simply register your routes using get or post methods [Available from v0.4.0]
     server.listen(8080);
 
 
-This Mocker exposes Nine methods
+This Mocker exposes Ten methods
 
 1. `mocker.handle(request, response)`. 
     Method to handle the request. This method validates header and payload then return the response which is mentioned in routes.json
@@ -228,7 +228,16 @@ This Mocker exposes Nine methods
 9. `mocker.disableLogs()`.
     This method is to disable logs to be written in console. [Available from v0.6.0]
 
+10. `mocker.setDefaultResponse(responseObj)`.
+    This method is to override the default response given by the mocker. `responseObj` should be in the same structure as in response object passed in `mocker.get`. [Available from v0.8.0]
+
 ###Change Log:
+
+####v0.8.1
+1. Document update.
+
+####v0.8.0
+1. Added method to override default response given by the mocker.
 
 ####v0.7.3
 1. Minor Document correction
