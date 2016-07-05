@@ -5,3 +5,4 @@ test.js
 io/
 routes/
 /coverage
+*.log

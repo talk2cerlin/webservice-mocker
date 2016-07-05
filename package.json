@@ -1,6 +1,6 @@
 {
   "name": "webservice-mocker",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "./index.js",
   "scripts": {
@@ -14,10 +14,14 @@
     "url": "https://github.com/talk2cerlin/webservice-mocker.git"
   },
   "keywords": [
+    "mock",
+    "api",
+    "api mock",
     "mocker",
     "webservicemocker",
     "apimocker",
-    "webservice"
+    "webservice",
+    "fakewebservice"
   ],
   "dependencies": {
     "lodash": "^4.6.1",
