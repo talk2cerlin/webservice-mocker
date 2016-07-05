@@ -10,7 +10,16 @@ var colors = require('colors/safe');
 var config = {
     "routeFile" : "./routes/routes.json",
     "cors" : false,
-    "logs" : false
+    "logs" : false,
+    "default" : {
+        "headers" : {
+            "content-type" : "application/json"
+        },
+        "statusCode" : 404,
+        "payload" : {
+            "error" : "Route not found"
+        }
+    }
 }
  
 /**
@@ -178,9 +187,7 @@ module.exports = function(){
             }
         } else {
             // TODO: should send default response which is mentioned in routes.json file.
-            response.setHeader('Content-Type', "application/json");
-            response.statusCode = 404;
-            return response.end(JSON.stringify({"error" : "Route not found"}));
+            return responseDispatcher(config.default);
         }
     };
 
