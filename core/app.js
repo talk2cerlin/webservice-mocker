@@ -581,8 +581,9 @@ module.exports = function(){
          * @return {void}
          */
         disableLogs : function () {
-            config.logs = false;
+            // Logging this before logs are disabled so that this message will be logged
             log.info("Logs are disabled.");
+            config.logs = false;
         }
     }
 
