@@ -4,7 +4,7 @@
   "description": "A simple webservice mocker to mock basic http calls",
   "main": "./index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "engines": {
     "npm": ">0.10"
@@ -32,6 +32,7 @@
   "license": "MIT",
   "devDependencies": {
     "blanket": "^1.2.3",
+    "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
     "mocha": "^2.4.5",
     "should": "^8.2.2",
