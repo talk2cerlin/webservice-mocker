@@ -3,11 +3,16 @@ var app = require("../index.js");
 var supertest = require('supertest');
 var should = require('should');
 
+app.enableLogs();
+app.enableCors();
+
 var server = null;
 var globalDone = null;
 
 var endExec = function(err, res){
     server.close();
+    app.disableCors();
+    app.disableLogs();
     if(err)
         globalDone(err);
     else
@@ -121,6 +126,30 @@ describe('GET / with wrong settings (routes and config files)', function(){
                 var body = res.body;
                 body.should.be.an.instanceOf(Object);
                 body.should.have.property('message').be.a.String().equal('Route found, but error loading in the corresponding config.');
+            })
+            .end(endExec);
+    });
+
+    it('Should throw route not found error since there is not definition for the given route', function(done){
+        globalDone = done;
+
+        var path = './test/testroutes/validroute.json';
+
+        server = http.createServer(function (req,res) {
+            app.setRouteFile(path);
+            app.handle(req,res);
+        });
+
+        server.listen(8000);
+
+        supertest(server)
+            .get('/api/v2/random')
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .expect(function(res){
+                var body = res.body;
+                body.should.be.an.instanceOf(Object);
+                body.should.have.property('error').be.a.String().equal('Route not found');
             })
             .end(endExec);
     });
@@ -354,5 +383,163 @@ describe('Testing POST request', function(){
                 })
                 .end(endExec);
         });
+    });
+});
+
+
+describe('Testing header validation', function(){
+
+    it('Should have error message for missing headers', function(done){
+        globalDone = done;
+        
+        var path = './test/testroutes/validroute.json';
+
+        server = http.createServer(function (req,res) {
+            app.setRouteFile(path);
+            app.handle(req,res);
+        });
+
+        server.listen(8000);
+
+        supertest(server)
+            .get('/api/v2/user')
+            .expect(400)
+            .expect('Content-Type', /json/)
+            .expect(function(res){
+                var body = res.body;
+                body.should.be.an.instanceOf(Object);
+                body.should.have.property('message').be.a.String().equal('One or more header(s) are missing');
+            })
+            .end(endExec);
+    });
+
+    it('Should have error message for wrong header value', function(done){
+        globalDone = done;
+        
+        var path = './test/testroutes/validroute.json';
+
+        server = http.createServer(function (req,res) {
+            app.setRouteFile(path);
+            app.handle(req,res);
+        });
+
+        server.listen(8000);
+
+        supertest(server)
+            .get('/api/v2/user')
+            .set('Content-Type', 'application/xml')
+            .expect(400)
+            .expect('Content-Type', /json/)
+            .expect(function(res){
+                var body = res.body;
+                body.should.be.an.instanceOf(Object);
+                body.should.have.property('message').be.a.String().equal('Header mismatch');
+            })
+            .end(endExec);
+    });
+});
+
+
+describe('Testing default response', function(){
+
+    it('Should recieve default response for Route not found', function(done){
+        globalDone = done;
+        
+        var path = './test/testroutes/validroute.json';
+
+        server = http.createServer(function (req,res) {
+            app.setRouteFile(path);
+            app.handle(req,res);
+        });
+
+        server.listen(8000);
+
+        supertest(server)
+            .get('/this/route/doesnt/exist')
+            .expect(404)
+            .expect('Content-Type', /json/)
+            .expect(function(res){
+                var body = res.body;
+                body.should.be.an.instanceOf(Object);
+                body.should.have.property('error').be.a.String().equal('Route not found');
+            })
+            .end(endExec);
+    });
+
+    it('Should recieve updated default response for Route not found', function(done){
+        globalDone = done;
+        
+        var path = './test/testroutes/validroute.json';
+
+        // Passing wrong response object just for code coverage
+
+        var defaultRes = {
+            "wrongHeadersKey" : {
+                "content-type" : "application/json"
+            },
+            "statusCode" : 200,
+            "wrongPayloadKey" : {
+                "error" : "New response"
+            }
+        }
+
+        app.setDefaultResponse(defaultRes);
+
+        defaultRes = {
+            "headers" : {
+                "content-type" : "application/json"
+            },
+            "statusCode" : 200,
+            "payload" : {
+                "error" : "New response"
+            }
+        }
+
+        app.setDefaultResponse(defaultRes);
+        server = http.createServer(function (req,res) {
+            app.setRouteFile(path);
+            app.handle(req,res);
+        });
+
+        server.listen(8000);
+
+        supertest(server)
+            .get('/this/route/doesnt/exist')
+            .expect(defaultRes.statusCode)
+            .expect('Content-Type', /json/)
+            .expect(function(res){
+                var body = res.body;
+                body.should.be.an.instanceOf(Object);
+                body.should.have.property('error').be.a.String().equal(defaultRes.payload.error);
+            })
+            .end(endExec);
+    });
+});
+
+
+describe('Testing CORS', function(){
+    it('Should recieve CORS headers', function(done){
+        globalDone = done;
+        
+        var path = './test/testroutes/validroute.json';
+
+        app.enableCors();
+        server = http.createServer(function (req,res) {
+            app.setRouteFile(path);
+            app.handle(req,res);
+        });
+
+        server.listen(8000);
+
+        supertest(server)
+            .options('/api/v2/user')
+            .expect(200)
+            .expect('Access-Control-Allow-Origin', '*')
+            .expect('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            .expect(function(res){
+                var body = res.body;
+                body.should.be.an.instanceOf(Object);
+            })
+            .end(endExec);
     });
 });
