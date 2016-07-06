@@ -2,6 +2,7 @@ Webservice Mocker
 ======
 
 ![Build](https://api.travis-ci.org/talk2cerlin/webservice-mocker.svg)
+[![Coverage Status](https://coveralls.io/repos/github/talk2cerlin/webservice-mocker/badge.svg?branch=dev)](https://coveralls.io/github/talk2cerlin/webservice-mocker?branch=dev)
 ![Version](https://img.shields.io/npm/v/webservice-mocker.svg)
 ![Downloads](https://img.shields.io/npm/dm/webservice-mocker.svg)
 ![Total Downloads](https://img.shields.io/npm/dt/webservice-mocker.svg)
@@ -232,6 +233,10 @@ This Mocker exposes Ten methods
     This method is to override the default response given by the mocker. `responseObj` should be in the same structure as in response object passed in `mocker.get`. [Available from v0.8.0]
 
 ###Change Log:
+
+####v0.8.2
+1. Updated build process with coverage report generation.
+2. Added code coverage badge.
 
 ####v0.8.1
 1. Document update.
