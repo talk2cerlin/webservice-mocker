@@ -179,14 +179,9 @@ module.exports = function(){
                 return response.end(JSON.stringify(data['payload']));
 
             } else {
-
-                response.setHeader('Content-Type', "application/json");
-                response.statusCode = 404;
-                return response.end(JSON.stringify({"error" : "Route not found"}));
-
+                return responseDispatcher(config.default);
             }
         } else {
-            // TODO: should send default response which is mentioned in routes.json file.
             return responseDispatcher(config.default);
         }
     };
