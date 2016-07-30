@@ -45,5 +45,8 @@
                 }
             }
         }
+    },
+    "GET:/api/v2/random" : {
+        "random" : "test"
     }
 }
