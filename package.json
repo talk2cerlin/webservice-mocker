@@ -31,7 +31,6 @@
   "author": "cerlin.selvamony@gmail.com",
   "license": "MIT",
   "devDependencies": {
-    "blanket": "^1.2.3",
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
     "mocha": "^2.4.5",
