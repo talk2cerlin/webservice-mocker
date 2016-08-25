@@ -7,7 +7,6 @@ Webservice Mocker
 ![Downloads](https://img.shields.io/npm/dm/webservice-mocker.svg)
 ![Total Downloads](https://img.shields.io/npm/dt/webservice-mocker.svg)
 ![Dependencies](https://david-dm.org/talk2cerlin/webservice-mocker.svg)
-![devDependencies](https://david-dm.org/talk2cerlin/webservice-mocker/dev-status.svg)
 
 A simple api mocker which validates the request and respond based on a config file.
 
@@ -233,6 +232,10 @@ This Mocker exposes Ten methods
     This method is to override the default response given by the mocker. `responseObj` should be in the same structure as in response object passed in `mocker.get`. [Available from v0.8.0]
 
 ###Change Log:
+####v0.8.4
+1. Update dependencies to accept latest patch version
+2. Removed dev dependency badge from the document
+
 ####v0.8.3
 1. Minor refactor
 2. Added more tests to improve code coverage
