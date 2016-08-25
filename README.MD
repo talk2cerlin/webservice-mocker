@@ -232,6 +232,10 @@ This Mocker exposes Ten methods
     This method is to override the default response given by the mocker. `responseObj` should be in the same structure as in response object passed in `mocker.get`. [Available from v0.8.0]
 
 ###Change Log:
+####v0.8.4
+1. Update dependencies to accept latest patch version
+2. Removed dev dependency badge from the document
+
 ####v0.8.3
 1. Minor refactor
 2. Added more tests to improve code coverage
