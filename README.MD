@@ -7,7 +7,6 @@ Webservice Mocker
 ![Downloads](https://img.shields.io/npm/dm/webservice-mocker.svg)
 ![Total Downloads](https://img.shields.io/npm/dt/webservice-mocker.svg)
 ![Dependencies](https://david-dm.org/talk2cerlin/webservice-mocker.svg)
-![devDependencies](https://david-dm.org/talk2cerlin/webservice-mocker/dev-status.svg)
 
 A simple api mocker which validates the request and respond based on a config file.
 
